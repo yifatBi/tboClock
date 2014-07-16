@@ -1,14 +1,16 @@
 package tboclock
 
+import grails.plugin.springsecurity.annotation.Secured
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+
 
 import java.sql.Timestamp
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-
+@Secured(['ROLE_ADMIN'])
 @Transactional(readOnly = false)
 class DayReportController {
     def scaffold = true;
@@ -29,20 +31,22 @@ class DayReportController {
         b.save flush: true}
     }
 
-    def getMonthValues(LocalDate date){
+    def getMonthValues(def date){
         LocalDate firstDay = date.dayOfMonth().withMinimumValue()
         LocalDate lastDay = date.dayOfMonth().withMaximumValue()
-        def reports = DayReport.createCriteria().list {
-            and {
-                between("day",firstDay,lastDay)
-            }
-            setMaxResults(lastDay.getDayOfMonth())
-            order("day", "ASC")
 
-        }
+       def reports = DayReport.findByDayBetween(firstDay,lastDay)?.findAllWhere(user: getAuthenticatedUser())
+//        def reports = DayReport.createCriteria().list {
+//            and {
+//                between("day",firstDay,lastDay)
+//                eq("user",getAuthenticatedUser())
+//            }
+//            setMaxResults(lastDay.getDayOfMonth())
+//            order("day", "ASC")
+//        }
         def days = [];
         days.addAll([])
-        for(def i in reports.asList()){
+        for(def i in reports?.asList()){
 
             days.add(i.getDay().getDayOfMonth().toString())
         }
@@ -50,8 +54,8 @@ class DayReportController {
             def day = firstDay.plusDays(i-1)
             if(!days.contains((i).toString()))
             {
-                def currDay = DayReport.findOrCreateByDay(day)
-                currDay.save()
+                def currDay = DayReport.findOrSaveByDayAndUser(day,getAuthenticatedUser())
+             //   currDay.save()
                 reports.add(currDay)
             }
         }

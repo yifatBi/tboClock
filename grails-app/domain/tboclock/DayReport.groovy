@@ -7,6 +7,7 @@ import org.joda.time.DateTime
 import org.joda.time.LocalTime
 import org.joda.time.Period
 import org.joda.time.field.PreciseDateTimeField
+import tboclock.auth.User
 
 import javax.persistence.Column
 import java.text.ParseException
