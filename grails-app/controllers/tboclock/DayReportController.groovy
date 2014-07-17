@@ -62,12 +62,17 @@ class DayReportController {
 
 
     def createReportsAjax() {
-
-        def dates = getFirstAndLastDayOfMonth(params.month,params.year)
-        render template: 'dayReport',
-               collection: getMonthValues(dates.first()),
-                var: 'dayReportInstance'
+        //check if admin user change date for his employers
+        if (!params.user || Integer.parseInt(params.user)== springSecurityService.getCurrentUser().id) {
+            def dates = getFirstAndLastDayOfMonth(params.month, params.year)
+            render template: 'dayReport',
+                    collection: getMonthValues(dates.first()),
+                    var: 'dayReportInstance'
+        }else
+        {
+          selectUserValue()
         }
+    }
 
     //Time change - income or out
     def ajaxTimeChange(){

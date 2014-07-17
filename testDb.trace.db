@@ -1,0 +1,9 @@
+07-16 12:33:43 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Table "DAY_REPORT" not found; SQL statement:
+alter table day_report drop constraint FK_37pogggi5q478p048di8i8wct if exists [42102-176]
+07-16 12:33:43 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Table "USER_ROLE" not found; SQL statement:
+alter table user_role drop constraint FK_it77eq964jhfqtu54081ebtio if exists [42102-176]
+07-16 12:33:43 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Table "USER_ROLE" not found; SQL statement:
+alter table user_role drop constraint FK_apcc8lxk2xnug8377fatvbn04 if exists [42102-176]

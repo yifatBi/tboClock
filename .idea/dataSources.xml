@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="2851335779">
+    <data-source source="LOCAL" name="tboClock dev" uuid="c1722d35-ffcc-4b83-a0c0-2084cd241a10">
+      <driver-ref>mysql</driver-ref>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost/dbname?useUnicode=yes&amp;characterEncoding=UTF-8</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>df9bdf98df99</user-password>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+
