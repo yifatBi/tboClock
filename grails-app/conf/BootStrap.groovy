@@ -15,12 +15,13 @@ class BootStrap {
         environments {
             development {
                 def adminRole = Role.findOrSaveWhere(authority: "ROLE_ADMIN");
+                def adminUser = Role.findOrSaveWhere(authority: "ROLE_USER");
                 def user = User.findOrSaveWhere(username: "w", password: "2",firstName: "yifat", lastName: "biezuner")
                 def user1 = User.findOrSaveWhere(username: "q", password: "1",firstName: "yifat", lastName: "biezuner")
                 if(!user.authorities.contains(adminRole))
                 {
                     UserRole.create(user,adminRole,true)
-                    UserRole.create(user1,adminRole,true)
+                    UserRole.create(user1,adminUser,true)
                 }
                // def hourFormat = new SimpleDateFormat("hh:mm")
                 def day = new LocalDate();

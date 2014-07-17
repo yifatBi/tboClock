@@ -131,13 +131,19 @@ log4j.main = {
            'net.sf.ehcache.hibernate'
 }
 
+grails.assets.less.compile = 'less4j'
+grails.assets.plugin."twitter-bootstrap".excludes = ["**/*.less"]
+grails.assets.plugin."twitter-bootstrap".includes = ["bootstrap.less"]
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'tboclock.auth.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'tboclock.auth.UserRole'
 grails.plugin.springsecurity.authority.className = 'tboclock.auth.Role'
+grails.plugin.springsecurity.roleHierarchy = '''
+   ROLE_ADMIN > ROLE_USER
+'''
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                              ['permitAll'],
+	'/':                              ['isAuthenticated()'],
 	'/index':                         ['permitAll'],
 	'/index.gsp':                     ['permitAll'],
 	'/assets/**':                     ['permitAll'],
@@ -145,6 +151,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
 	'/**/favicon.ico':                ['permitAll'],
-    '/dbconsole/**':                  ['permitAll']
+    '/dbconsole/**':                  ['permitAll'],
+    '/**': ['isAuthenticated()']
 ]
 

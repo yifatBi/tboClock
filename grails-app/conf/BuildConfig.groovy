@@ -62,6 +62,7 @@ grails.project.dependency.resolution = {
         // plugins for the build system only
         build ":tomcat:7.0.54"
         // plugins for the compile step
+        compile ":twitter-bootstrap:3.2.1"
         compile ":spring-security-core:2.0-RC4"
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
@@ -72,10 +73,11 @@ grails.project.dependency.resolution = {
         runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
+        runtime ':twitter-bootstrap:3.2.1'
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.7.4"
-        //compile ":less-asset-pipeline:1.7.0"
+//        compile ":less-asset-pipeline:1.9.0"
         //compile ":coffee-asset-pipeline:1.7.0"
         //compile ":handlebars-asset-pipeline:1.3.0.3"
     }

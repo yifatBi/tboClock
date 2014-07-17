@@ -4,23 +4,21 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-
+import tboclock.auth.User
 
 import java.sql.Timestamp
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_USER'])
 @Transactional(readOnly = false)
 class DayReportController {
     def scaffold = true;
-
+    def springSecurityService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        params.month = new LocalDate().getMonthOfYear();
-        params.year = new LocalDate().getYear();
         respond getMonthValues(new LocalDate()), model:[dayReportInstanceCount: DayReport.count()]
     }
 
@@ -35,52 +33,43 @@ class DayReportController {
         LocalDate firstDay = date.dayOfMonth().withMinimumValue()
         LocalDate lastDay = date.dayOfMonth().withMaximumValue()
 
-       def reports = DayReport.findByDayBetween(firstDay,lastDay)?.findAllWhere(user: getAuthenticatedUser())
-//        def reports = DayReport.createCriteria().list {
-//            and {
-//                between("day",firstDay,lastDay)
-//                eq("user",getAuthenticatedUser())
-//            }
-//            setMaxResults(lastDay.getDayOfMonth())
-//            order("day", "ASC")
-//        }
-        def days = [];
-        days.addAll([])
-        for(def i in reports?.asList()){
-
-            days.add(i.getDay().getDayOfMonth().toString())
-        }
-        for ( i in 1..lastDay.getDayOfMonth()) {
+        def reports = [];
+        for(i in 1..lastDay.getDayOfMonth()){
             def day = firstDay.plusDays(i-1)
-            if(!days.contains((i).toString()))
-            {
-                def currDay = DayReport.findOrSaveByDayAndUser(day,getAuthenticatedUser())
-             //   currDay.save()
-                reports.add(currDay)
-            }
+            def curr = DayReport.findOrSaveByDayAndUser(day,springSecurityService.currentUser)
+            reports.add(curr);
         }
         return reports.sort{it.day}
     }
 
+    def selectUserValue(){
+        def dates = getFirstAndLastDayOfMonth(params.month,params.year)
+        def user = User.get(params.user);
+        def reports = DayReport.findAllByDayBetweenAndUser(dates.first(),dates.last(),user);
+        render template: 'dayReport',
+                collection: reports.sort{it.day},
+                var: 'dayReportInstance'
+    }
+
+    // get first and last day of month
+    private getFirstAndLastDayOfMonth(String Smonth,String year){
+        Integer month = (Integer.parseInt(Smonth))
+        def date = new LocalDate().withMonthOfYear(month).withYear(Integer.parseInt(year))
+        LocalDate firstDay = date.dayOfMonth().withMinimumValue()
+        LocalDate lastDay = date.dayOfMonth().withMaximumValue()
+        return [firstDay,lastDay]
+    }
+
 
     def createReportsAjax() {
-            Integer month = (Integer.parseInt(params.month))
-           def date = new LocalDate().withMonthOfYear(month).withYear(Integer.parseInt(params.year))
 
+        def dates = getFirstAndLastDayOfMonth(params.month,params.year)
         render template: 'dayReport',
-               collection: getMonthValues(date),
+               collection: getMonthValues(dates.first()),
                 var: 'dayReportInstance'
         }
 
-
-    def show(DayReport dayReportInstance) {
-        respond dayReportInstance
-    }
-
-    def create() {
-        respond new DayReport(params)
-    }
-
+    //Time change - income or out
     def ajaxTimeChange(){
         def val = 0;
         String property="";
@@ -96,6 +85,7 @@ class DayReportController {
         // validate pattern
         def pattern = ~/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/
 
+        // validate pattern
        if(val && pattern.matcher(val).matches()){
             DayReport b = DayReport.findById(Long.parseLong(params.getIdentifier().toString()))
             //val = Date.parse('HH:mm', val);
@@ -103,11 +93,9 @@ class DayReportController {
            def minutes = Integer.parseInt(val.split(":")[1])
             def time = new LocalTime().withHourOfDay(hours).withMinuteOfHour(minutes)
            b.setProperty(property,time)
-           // b.setProperty(property,b.getProperty(property).updated([hourOfDay:val.getHours(), minute:val.getMinutes()]))
            b.save flush: true
            render b.total
        }
-
     }
 
     @Transactional
@@ -126,19 +114,9 @@ class DayReportController {
 
         dayReportInstance.total;
         request.withFormat {
-//            form multipartForm {
-//              //  flash.message = message(code: 'default.created.message', args: [message(code: 'dayReport.label', default: 'DayReport'), dayReportInstance.id])
-//                redirect dayReportInstance
-//            }
-           // '*'{respond dayReportInstance.total}
-
             '*' { respond dayReportInstance}
         }
 
-    }
-
-    def edit(DayReport dayReportInstance) {
-        respond dayReportInstance
     }
 
     @Transactional

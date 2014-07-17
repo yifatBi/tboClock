@@ -4,10 +4,24 @@
 <head>
     <meta name="layout" content="main">
     <g:setProvider library="jquery"/>
+    %{--<g:setProvider library="bootstrap"/>--}%
+    <asset:javascript src="bootstrap-select"/>
+    <asset:stylesheet href="bootstrap-select"/>
     <g:javascript >
             $(document).ready(function(){
 //        $('.datepicker').datepicker();
         %{--$('#mon').change= < g:remoteFunction action="createReportsAjax" id="1" />--}%
+        $('#users').on("change",function(){
+        $("#pageTitle").text($(this.selectedOptions).text() + " " + "reports ")
+                 var year = document.getElementById("mon_year").value
+            var month = document.getElementById("mon_month").value
+            var user = this.value
+        ${remoteFunction(
+                update: "allReports",
+                action: 'selectUserValue',
+                params: '{year: year, month: month, user: user}')}}
+        )
+
        $('#mon_month').on("change",function(){changeMonth()})
        $('#mon_year').on("change",function(){changeMonth()})
        function changeMonth(value){
@@ -17,29 +31,36 @@
                 update: "allReports",
                 action: 'createReportsAjax',
                 params: '{year: a, month: month}')}}
+         $('#sandbox-container input')
         })
     </g:javascript>
     <g:set var="entityName" value="${message(code: 'dayReport.label', default: 'DayReport')}" />
-    <title><g:message code="tbo.userReport.title" args='["Yifat"]' /></title>
+    <title><g:message code="tbo.userReport.title" args="${sec.loggedInUserInfo(field: 'username')}" /></title>
 </head>
 <body>
-<a href="#list-dayReport" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-        <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-    </ul>
-</div>
+<input type="text" id="sandbox-container" type="text" class="form-control">
 <div id="list-dayReport" class="content container-fluid" role="main">
-    <h1><g:message code="default.list.label" args="[entityName]" /></h1>
+    <h1 id="pageTitle"><g:message code="default.list.label" args="[entityName]" /></h1>
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
-    %{--<div class="datepicker"></div>--}%
-    %{--<g:remoteLink update="table" action="createReportsAjax">--}%
+    <div id="select" class="form-horizontal">
+    <label for="mon">date: </label>
         <joda:datePicker class="span" id="mon" name="mon" precision="month" relativeYears="[-2..2]" value="${new LocalDate()}" onchange="${remoteFunction(action:'createReportsAjax',params: '\'month=\' + this.value')}" ></joda:datePicker>
-%{--<button class=" btn btn-danger" value="123"></button>--}%
-    %{--</g:remoteLink>--}%
+      <div class="pull-right">
+        <sec:ifLoggedIn>
+            <g:form name="logoutForm" controller="logout" action="index">
+                <g:submitButton class="btn-primary" name="signOut" value="sign out"/>
+            </g:form>
+        </sec:ifLoggedIn>
+    </div>
+        %{--<div class="">--}%
+        <sec:access expression="hasRole('ROLE_ADMIN')">
+            <label for="users"> user: </label>
+<g:select name="users" class="selectpicker" from="${tboclock.auth.User.list()}" optionValue="fullname" optionKey="id"></g:select>
+            </sec:access>
+            %{--</div>--}%
+        </div>
     <table id="table" class="table-striped">
         <thead>
         <tr>
