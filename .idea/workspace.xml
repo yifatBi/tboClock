@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7880f636-3c02-4d5c-92cb-f904e0996b14" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/Config.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/tboclock/DayReportController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/tboclock/DayReportController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/dayReport/_dayReport.gsp" afterPath="$PROJECT_DIR$/grails-app/views/dayReport/_dayReport.gsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/assets/stylesheets/application.css" afterPath="$PROJECT_DIR$/grails-app/assets/stylesheets/application.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/dayReport/index.gsp" afterPath="$PROJECT_DIR$/grails-app/views/dayReport/index.gsp" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/work/plugins/twitter-bootstrap-3.2.0/web-app/css/bootstrap-select.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/work/plugins/twitter-bootstrap-3.2.0/web-app/js/bootstrap-select.min.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tboClock" afterPath="$PROJECT_DIR$/tboClock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="tboClock.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -550,7 +548,7 @@
       <workItem from="1405515110509" duration="5712000" />
       <workItem from="1405574066217" duration="12185000" />
       <workItem from="1405591880494" duration="980000" />
-      <workItem from="1405600279400" duration="8881000" />
+      <workItem from="1405600279400" duration="9181000" />
     </task>
     <task id="LOCAL-00001" summary="add user security">
       <created>1405522534480</created>
@@ -564,7 +562,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38048000" />
+    <option name="totallyTimeSpent" value="38348000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
